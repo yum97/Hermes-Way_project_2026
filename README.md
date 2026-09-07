@@ -1,2 +1,2 @@
-# TabiNavi_project_2026
+# Hermes-Way_project_2026
 旅行関連の簡単なコミュニティサイト
