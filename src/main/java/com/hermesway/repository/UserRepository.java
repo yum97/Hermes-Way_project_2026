@@ -5,12 +5,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-// ユーザー情報をデータベースから取得するRepository
+/**
+ * ユーザー情報をデータベースから取得するRepository
+ */
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    // メールアドレスからユーザーを検索
+    // メールアドレスでユーザーを検索
     Optional<User> findByEmail(String email);
 
-    // メールアドレスが既に登録されているか確認
+    // メールアドレスの重複確認
     boolean existsByEmail(String email);
+
+    // ニックネームの重複確認
+    boolean existsByNickname(String nickname);
 }

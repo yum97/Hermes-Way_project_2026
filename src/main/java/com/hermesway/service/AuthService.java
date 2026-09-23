@@ -13,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.hermesway.dto.auth.RegisterRequest;
+import com.hermesway.dto.auth.UserResponse;
+
 /**
  * 認証関連のビジネスロジックを管理するサービス
  */
@@ -106,4 +109,65 @@ public class AuthService {
 
         response.addCookie(cookie);
     }
+
+    /**
+     * 現在ログインしているユーザー情報を取得する
+     *
+     * @param email ユーザーのメールアドレス
+     * @return ユーザー情報DTO
+     */
+    public UserResponse getCurrentUser(String email) {
+
+    User user = userRepository.findByEmail(email)
+            .orElseThrow(() ->
+                    new IllegalArgumentException(
+                            "ユーザーが見つかりません。"
+                    )
+            );
+
+    return UserResponse.from(user);
+}
+
+/**
+ * 新規ユーザー登録
+ */
+public UserResponse register(RegisterRequest request) {
+
+    // メールアドレスの重複確認
+    if (userRepository.existsByEmail(request.getEmail())) {
+        throw new IllegalArgumentException(
+                "すでに使用されているメールアドレスです。"
+        );
+    }
+
+    // ニックネームの重複確認
+    if (userRepository.existsByNickname(request.getNickname())) {
+        throw new IllegalArgumentException(
+                "すでに使用されているニックネームです。"
+        );
+    }
+
+    // パスワードをBCryptで暗号化
+    String encodedPassword =
+            passwordEncoder.encode(request.getPassword());
+
+    // ユーザーEntityを生成
+    User user = User.builder()
+            .email(request.getEmail())
+            .password(encodedPassword)
+            .nickname(request.getNickname())
+            .name(request.getName())
+            .profileImage(request.getProfileImage())
+            .bio(request.getBio())
+            .address(request.getAddress())
+            .role(User.Role.USER)
+            .status(User.Status.ACTIVE)
+            .build();
+
+    // AWS RDS PostgreSQLへ保存
+    User savedUser = userRepository.save(user);
+
+    // EntityをレスポンスDTOへ変換
+    return UserResponse.from(savedUser);
+}
 }

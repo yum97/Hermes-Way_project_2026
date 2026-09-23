@@ -8,6 +8,12 @@ import jakarta.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.core.Authentication;
+
+import com.hermesway.dto.auth.RegisterRequest;
+import com.hermesway.dto.auth.UserResponse;
+import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,4 +60,35 @@ public class AuthController {
 
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * 現在ログインしているユーザー情報を取得するエンドポイント
+     *
+     * @param authentication 認証情報
+     * @return ユーザー情報
+     */
+    @GetMapping("/me")
+public ResponseEntity<UserResponse> me(Authentication authentication) {
+
+    UserResponse user =
+            authService.getCurrentUser(authentication.getName());
+
+    return ResponseEntity.ok(user);
+}
+
+/**
+ * 新規ユーザー登録
+ */
+@PostMapping("/register")
+public ResponseEntity<UserResponse> register(
+        @Valid @RequestBody RegisterRequest request
+) {
+
+    UserResponse userResponse =
+            authService.register(request);
+
+    return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(userResponse);
+}
 }

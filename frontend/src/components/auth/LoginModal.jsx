@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 // ログイン用モーダルコンポーネント
-function LoginModal({ onClose }) {
+function LoginModal({ onClose, onRegisterClick  }) {
 
   // メールアドレス
   const [email, setEmail] = useState("");
@@ -189,21 +189,19 @@ function LoginModal({ onClose }) {
         </button>
 
         {/* 新規登録 */}
-        <div className="login-register">
-          <p>
-            アカウントをお持ちでない方
-          </p>
+<div className="login-register">
+  <p>
+    アカウントをお持ちでない方
+  </p>
 
-          <button
-            type="button"
-            className="register-button"
-            onClick={() =>
-              console.log("新規登録")
-            }
-          >
-            新規登録
-          </button>
-        </div>
+  <button
+    type="button"
+    className="register-button"
+    onClick={onRegisterClick}
+  >
+    新規登録
+  </button>
+</div>
 
       </div>
     </div>

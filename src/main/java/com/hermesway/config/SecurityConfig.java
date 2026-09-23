@@ -50,7 +50,8 @@ public class SecurityConfig {
                         // ログイン・会員登録は未ログインでも許可
                         .requestMatchers(
                                 "/api/auth/login",
-                                "/api/auth/register"
+                                "/api/auth/register",
+                                "/api/auth/logout"
                         ).permitAll()
 
                         // 現段階ではその他も許可
