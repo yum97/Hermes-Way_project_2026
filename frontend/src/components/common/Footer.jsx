@@ -1,132 +1,54 @@
-/**
- * HERMES WAYの共通フッター
- *
- * サービス情報、ナビゲーション、
- * SNSリンク、著作権情報を表示する。
- */
+// サイト下部のフッターコンポーネント
 function Footer() {
-
-  /* =========================================
-     SNSリンク
-
-     現在は仮のURLを使用する。
-     実際の公式アカウントを作成した後に変更する。
-  ========================================== */
-  const socialLinks = {
-    instagram: "https://www.instagram.com/",
-    x: "https://x.com/",
-    youtube: "https://www.youtube.com/",
-  };
-
-
   return (
-    <footer className="site-footer">
-
-      <div className="footer-container">
-
-        {/* =================================
-            サービス情報
-        ================================== */}
+    <footer className="footer">
+      <div className="footer-main">
+        {/* ブランド情報 */}
         <div className="footer-brand">
-
           <div className="footer-logo">
-            HmW
+            <span>HmW</span>
+            <strong>HERMES WAY</strong>
           </div>
-
-          <h3>
-            HERMES WAY
-          </h3>
 
           <p>
-            Find Your Way, Share Your Journey.
+            Find Your Way,
+            <br />
+            Share Your Journey.
           </p>
-
         </div>
 
-
-        {/* =================================
-            フッターナビゲーション
-        ================================== */}
-        <div className="footer-links">
-
-          <h4>
-            HERMES WAY
-          </h4>
-
-          <a href="#travel">
-            Travel
-          </a>
-
-          <a href="#places">
-            Places
-          </a>
-
-          <a href="#community">
-            Community
-          </a>
-
+        {/* フッターナビゲーション */}
+        <div className="footer-column">
+          <h3>Explore</h3>
+          <a href="#">Travel</a>
+          <a href="#">Places</a>
+          <a href="#">Community</a>
+          <a href="#">Search</a>
         </div>
 
-
-        {/* =================================
-            SNS
-        ================================== */}
-        <div className="footer-social">
-
-          <h4>
-            Follow Us
-          </h4>
-
-          <div className="social-icons">
-
-            {/* Instagram */}
-            <a
-              href={socialLinks.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-            >
-              ◎
-            </a>
-
-            {/* X */}
-            <a
-              href={socialLinks.x}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="X"
-            >
-              𝕏
-            </a>
-
-            {/* YouTube */}
-            <a
-              href={socialLinks.youtube}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="YouTube"
-            >
-              ▶
-            </a>
-
-          </div>
-
+        <div className="footer-column">
+          <h3>HERMES WAY</h3>
+          <a href="#">About Us</a>
+          <a href="#">Contact</a>
+          <a href="#">Terms</a>
+          <a href="#">Privacy</a>
         </div>
 
+        {/* SNS */}
+        <div className="footer-column">
+          <h3>Follow Us</h3>
+
+          <a href="#">Instagram</a>
+          <a href="#">X</a>
+          <a href="#">YouTube</a>
+        </div>
       </div>
 
-
-      {/* =================================
-          Copyright
-      ================================== */}
       <div className="footer-bottom">
-
         <p>
-          © 2026 HERMES WAY. All Rights Reserved.
+          © 2026 HERMES WAY. All rights reserved.
         </p>
-
       </div>
-
     </footer>
   );
 }
