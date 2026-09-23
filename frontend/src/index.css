@@ -1214,3 +1214,20 @@ a {
     padding: 34px 24px;
   }
 }
+
+/* ログインエラーメッセージ */
+.login-error-message {
+  margin: -4px 0 0;
+
+  color: #b23b3b;
+
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ログイン処理中 */
+.login-submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
