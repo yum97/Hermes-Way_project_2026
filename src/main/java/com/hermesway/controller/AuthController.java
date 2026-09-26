@@ -61,19 +61,27 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * 現在ログインしているユーザー情報を取得するエンドポイント
-     *
-     * @param authentication 認証情報
-     * @return ユーザー情報
-     */
-    @GetMapping("/me")
-public ResponseEntity<UserResponse> me(Authentication authentication) {
+       /**
+ * 現在ログインしているユーザー情報を取得
+ */
+@GetMapping("/me")
+public ResponseEntity<UserResponse> me(
+        Authentication authentication
+) {
 
-    UserResponse user =
-            authService.getCurrentUser(authentication.getName());
+    // 認証情報が存在しない場合
+    if (authentication == null) {
+        return ResponseEntity
+                .status(401)
+                .build();
+    }
 
-    return ResponseEntity.ok(user);
+    UserResponse currentUser =
+            authService.getCurrentUser(
+                    authentication.getName()
+            );
+
+    return ResponseEntity.ok(currentUser);
 }
 
 /**

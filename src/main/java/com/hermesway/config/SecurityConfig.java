@@ -1,21 +1,32 @@
 package com.hermesway.config;
 
+import com.hermesway.security.JwtFilter;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * Spring Securityの設定
  */
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final JwtFilter jwtFilter;
+
     /**
-     * パスワードの暗号化・照合に使用
+     * パスワード暗号化
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -23,10 +34,7 @@ public class SecurityConfig {
     }
 
     /**
-     * Spring SecurityのHTTPセキュリティ設定
-     * 
-     * @param http HttpSecurityオブジェクト
-     * @return SecurityFilterChain
+     * Security設定
      */
     @Bean
     public SecurityFilterChain securityFilterChain(
@@ -34,28 +42,45 @@ public class SecurityConfig {
     ) throws Exception {
 
         http
-                // REST API開発段階ではCSRFを無効化
-                // 本番環境ではCookie認証に合わせて再設定する
+                // JWT認証を使用するためCSRFを一旦無効化
                 .csrf(csrf -> csrf.disable())
 
-                // Spring Security標準のログイン画面を使用しない
+                // Spring Security標準ログイン画面を無効化
                 .formLogin(form -> form.disable())
 
-                // HTTP Basic認証も使用しない
+                // Basic認証を無効化
                 .httpBasic(basic -> basic.disable())
 
-                // APIのアクセス権限
+                // JWTを使用するためSessionを作成しない
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(
+                                SessionCreationPolicy.STATELESS
+                        )
+                )
+
+                // APIアクセス権限
                 .authorizeHttpRequests(auth -> auth
 
-                        // ログイン・会員登録は未ログインでも許可
+                        // ログイン前でもアクセス可能
                         .requestMatchers(
                                 "/api/auth/login",
                                 "/api/auth/register",
                                 "/api/auth/logout"
                         ).permitAll()
 
-                        // 現段階ではその他も許可
+                        // ログイン済みユーザーのみアクセス可能
+                        .requestMatchers(
+                                "/api/auth/me"
+                        ).authenticated()
+
+                        // 現在はその他のAPIを許可
                         .anyRequest().permitAll()
+                )
+
+                // JWT認証フィルターを実行
+                .addFilterBefore(
+                        jwtFilter,
+                        UsernamePasswordAuthenticationFilter.class
                 );
 
         return http.build();

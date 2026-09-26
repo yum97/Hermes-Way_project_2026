@@ -1,7 +1,11 @@
+import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
 
 // ログイン用モーダルコンポーネント
-function LoginModal({ onClose, onRegisterClick  }) {
+function LoginModal({ onClose, onRegisterClick }) {
+
+  // AuthContextからrefreshUser関数を取得
+  const { refreshUser } = useAuth();
 
   // メールアドレス
   const [email, setEmail] = useState("");
@@ -51,8 +55,8 @@ function LoginModal({ onClose, onRegisterClick  }) {
         );
       }
 
-      // ログイン成功
-      console.log("ログイン成功");
+      // ログイン成功後、現在のユーザー情報を取得
+      await refreshUser();
 
       // モーダルを閉じる
       onClose();
@@ -189,19 +193,19 @@ function LoginModal({ onClose, onRegisterClick  }) {
         </button>
 
         {/* 新規登録 */}
-<div className="login-register">
-  <p>
-    アカウントをお持ちでない方
-  </p>
+        <div className="login-register">
+          <p>
+            アカウントをお持ちでない方
+          </p>
 
-  <button
-    type="button"
-    className="register-button"
-    onClick={onRegisterClick}
-  >
-    新規登録
-  </button>
-</div>
+          <button
+            type="button"
+            className="register-button"
+            onClick={onRegisterClick}
+          >
+            新規登録
+          </button>
+        </div>
 
       </div>
     </div>
